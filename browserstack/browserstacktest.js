@@ -1,5 +1,8 @@
+const fs = require('fs');
+
 const webdriver = require('selenium-webdriver');
 const { until } = require('selenium-webdriver');
+
 
 const capabilities1 = {
     'bstack:options' : {
@@ -46,17 +49,25 @@ timeout = time => {
 }
 
 async function runTestWithCaps (capabilities) {
-  let driver = new webdriver.Builder()
+    webdriver.WebDriver.prototype.saveScreenshot = function(filename) {
+        return driver.takeScreenshot().then(function(data) {
+            fs.writeFile(filename, data.replace(/^data:image\/png;base64,/,''), 'base64', function(err) {
+                if(err) throw err;
+            });
+        })
+    }
+
+    let driver = new webdriver.Builder()
     .usingServer('http://ramiromoya_S7FTzC:qRYAAQx1eseJcySswMx5@hub-cloud.browserstack.com/wd/hub')
     .withCapabilities({
-      ...capabilities,
-      ...capabilities['browser'] && { browserName: capabilities['browserName']}  // Because NodeJS language binding requires browserName to be defined
+        ...capabilities,
+        ...capabilities['browser'] && { browserName: capabilities['browserName']}  // Because NodeJS language binding requires browserName to be defined
     })
     .build();
-    
+
     await driver.get('https://ramita-0.github.io/');
     await driver.manage().window().maximize()
-    
+
     // hover y clickeado del boton js
     let botonJs = await driver.findElement({xpath: "/html/body/nav/ul/li[1]/a"})
     await driver.wait(until.elementIsVisible(botonJs))
@@ -77,7 +88,7 @@ async function runTestWithCaps (capabilities) {
     botonCarousel.click()
     await driver.wait(timeout(1000))
     botonCarousel.click()
-    
+
     // hover sobre cards
     await driver.wait(timeout(800))
     const card0 = driver.findElement({xpath: "/html/body/div[2]/div/div[3]/div/div[1]/div[2]"})
@@ -86,13 +97,13 @@ async function runTestWithCaps (capabilities) {
     await driver.actions().move({origin: card0}).perform()        
     const card1 = driver.findElement({xpath: "/html/body/div[2]/div/div[3]/div/div[2]/div[2]"})
     await driver.actions().move({duration: 1500, origin: card1}).perform()
-    
+
     // hover y clickeado del boton de la ultima card
     const botonCard1 = driver.findElement({xpath: "/html/body/div[2]/div/div[3]/div/div[2]/div[3]/a"})
     await driver.actions().move({duration: 500, origin: botonCard1}).perform()
     await driver.wait(timeout(800))
     botonCard1.click()
-    
+
     // insercion de datos
     await driver.wait(timeout(1000))
     const nuevosDatos = driver.findElement({xpath: '//*[@id="nuevosDatos"]'})
@@ -109,6 +120,8 @@ async function runTestWithCaps (capabilities) {
     edadField.sendKeys(19)
     await driver.wait(timeout(400))
     driver.findElement({xpath: '//*[@id="insertarDatos"]'}).click()
+
+    driver.saveScreenshot(`snapshot ${Date.now()}`)
 
     // volver a la landing y salir
     await driver.wait(timeout(1500))
