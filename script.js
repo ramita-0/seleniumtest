@@ -72,6 +72,7 @@ timeout = time => {
                                                 edadField.sendKeys(19)
                                                 driver.findElement({xpath: '//*[@id="insertarDatos"]'}).click()
                                                 
+                                                // navegar a la landing
                                                 timeout(1500).then(async woke => {
                                                     driver.navigate().back()
                                                     driver.navigate().back()
