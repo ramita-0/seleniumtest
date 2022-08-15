@@ -59,17 +59,17 @@ timeout = time => {
                                     // escritura de nombre
                                     timeout(200).then(async woke => {
                                         const nombreField = driver.findElement({xpath: '//*[@id="input1"]'})
-                                        nombreField.sendKeys("Puto")
+                                        nombreField.sendKeys("Ramiro")
                                         
                                         // escritura de nombre
                                         timeout(1000).then(async woke => {
                                             const apellidoField = driver.findElement({xpath: '//*[@id="input2"]'})
-                                            apellidoField.sendKeys("el que")
+                                            apellidoField.sendKeys("Moya")
                                             
                                             // escritura de nombre
                                             timeout(1000).then(async woke => {
                                                 const edadField = driver.findElement({xpath: '//*[@id="input3"]'})
-                                                edadField.sendKeys("lee")
+                                                edadField.sendKeys(19)
                                                 driver.findElement({xpath: '//*[@id="insertarDatos"]'}).click()
                                                 
                                                 timeout(1500).then(async woke => {
