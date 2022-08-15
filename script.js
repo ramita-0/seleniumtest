@@ -23,7 +23,6 @@ timeout = time => {
     timeout(500).then(async woke => {
         const botonJs = driver.findElement({xpath: "/html/body/nav/ul/li[1]/a"})
         driver.actions().move({duration: 0, origin: botonJs}).perform()
-        console.log("hovered");
         
         // entro a la seccion js
         timeout(650).then(async woke => {
@@ -47,7 +46,41 @@ timeout = time => {
                         timeout(1000).then(async woke => {
                             const botonCard1 = driver.findElement({xpath: "/html/body/div[2]/div/div[3]/div/div[2]/div[3]/a"})
                             driver.actions().move({duration: 0, origin: botonCard1}).perform()
-                        
+                            
+                            // entrar a la seccion de cargado de datos
+                            timeout(500).then(async woke => {
+                                botonCard1.click()
+                                
+                                // click al boton de nuevos datos
+                                timeout(1000).then(async => {
+                                    const nuevosDatos = driver.findElement({xpath: '//*[@id="nuevosDatos"]'})
+                                    nuevosDatos.click()
+                                    
+                                    // escritura de nombre
+                                    timeout(200).then(async woke => {
+                                        const nombreField = driver.findElement({xpath: '//*[@id="input1"]'})
+                                        nombreField.sendKeys("Puto")
+                                        
+                                        // escritura de nombre
+                                        timeout(1000).then(async woke => {
+                                            const apellidoField = driver.findElement({xpath: '//*[@id="input2"]'})
+                                            apellidoField.sendKeys("el que")
+                                            
+                                            // escritura de nombre
+                                            timeout(1000).then(async woke => {
+                                                const edadField = driver.findElement({xpath: '//*[@id="input3"]'})
+                                                edadField.sendKeys("lee")
+                                                driver.findElement({xpath: '//*[@id="insertarDatos"]'}).click()
+                                                
+                                                timeout(1500).then(async woke => {
+                                                    driver.navigate().back()
+                                                    driver.navigate().back()
+                                                })
+                                            })
+                                        })
+                                    })
+                                })
+                            })
                         })
                     })
                 })
