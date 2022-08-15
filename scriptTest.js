@@ -1,41 +1,4 @@
-const webdriver = require('selenium-webdriver');
-const { until } = require('selenium-webdriver');
-
-const capabilities1 = {
-    'bstack:options' : {
-        "resolution": "1920x1080",
-        "os": "Windows",
-        "osVersion": "11",
-        "buildName" : "browserstack-build-1",
-        "sessionName" : "Parallel test 1",
-    },
-    "browserName": "chrome",
-    "browserVersion": "103.0",
-}
-
- const capabilities2 = {
-    'bstack:options' : {
-        "resolution": "1920x1080",
-        "os": "Windows",
-        "osVersion": "11",
-        "buildName" : "browserstack-build-1",
-        "sessionName" : "Parallel test 2",
-    },
-    "browserName": "firefox",
-    "browserVersion": "103.0",
-}
-
-const capabilities3 = {
-    'bstack:options' : {
-        "resolution": "1920x1080",
-        "os": "OS X",
-        "osVersion": "Big Sur",
-        "buildName" : "browserstack-build-1",
-        "sessionName" : "Parallel test 3",
-    },
-    "browserName": "safari",
-    "browserVersion": "14.1",
-}
+const {Builder, WebDriver, By, Key, until, Actions, Window} = require('selenium-webdriver');
 
 timeout = time => {
     return new Promise((res, rej) => {
@@ -45,15 +8,9 @@ timeout = time => {
     })
 }
 
-async function runTestWithCaps (capabilities) {
-  let driver = new webdriver.Builder()
-    .usingServer('http://ramiromoya_S7FTzC:qRYAAQx1eseJcySswMx5@hub-cloud.browserstack.com/wd/hub')
-    .withCapabilities({
-      ...capabilities,
-      ...capabilities['browser'] && { browserName: capabilities['browserName']}  // Because NodeJS language binding requires browserName to be defined
-    })
-    .build();
-    
+(async function main() {
+    // instanciando el driver y entrando a mi web
+    let driver = await new Builder().forBrowser('firefox').build();
     await driver.get('https://ramita-0.github.io/');
     await driver.manage().window().maximize()
     
@@ -117,8 +74,4 @@ async function runTestWithCaps (capabilities) {
     await driver.navigate().back()
     await driver.wait(timeout(1000))
     await driver.quit()
-}
-
-runTestWithCaps(capabilities1);
-runTestWithCaps(capabilities2);
-runTestWithCaps(capabilities3);
+})()
